@@ -1,3 +1,4 @@
-- name: Import common role
-  ansible.builtin.import_roles:
-    name: common
+- name: frontend
+  ansible.builtin.copy:
+    src: mongodb.repo
+    dest: /etc/yum.repos.d/mongodb.repo
