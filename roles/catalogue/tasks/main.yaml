@@ -6,9 +6,9 @@
     name: nodejs
     state: installed
 
-- name: Add Roboshop user
+- name: Add roboshop user
   ansible.builtin.user:
-    name: Roboshop
+    name: roboshop
     comment: Roboshop App User
 
 - name: Remove old app  content
