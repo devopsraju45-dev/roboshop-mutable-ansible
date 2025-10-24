@@ -2,3 +2,22 @@
   ansible.builtin.copy:
     src: mongodb.repo
     dest: /etc/yum.repos.d/mongodb.repo
+
+
+- name: Install mongodb cofig
+  ansible.builtin.yum:
+    name: mongodb-org
+    state: installed
+
+
+- name: Update mongo db listen address
+  ansible.builtin.replace:
+    path: /etc/mongodb.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
+
+- name: Restart Mongodb
+  ansible.builtin.replace:
+    name: mongodb
+    state: restarted
+    enabled: yes
