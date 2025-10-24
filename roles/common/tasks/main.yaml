@@ -1,2 +1,5 @@
 - name: SET Hostname
   ansible.builtin.shell: set-hostname {{COMPONENT}}
+
+- name: Install galaxy
+  ansible.builtin.shell: ansible-galaxy collection install community.general
