@@ -22,7 +22,7 @@
     remote_src: yes
 
 - name: copy config file
-  ansible.builtin.templete:
+  ansible.builtin.template:
     src: roboshop.conf
     dest: /etc/nginx/default.d/roboshop.conf
 
