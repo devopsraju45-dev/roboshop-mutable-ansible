@@ -5,6 +5,7 @@
     - "{{APP_COMPONENT_NAME}}"
 
 - name: Download frontend content
+  tasks:
   ansible.builtin.get_url:
     url: https://github.com/roboshop-devops-project/frontend/archive/main.zip
     dest: /tmp/frontend.zip
