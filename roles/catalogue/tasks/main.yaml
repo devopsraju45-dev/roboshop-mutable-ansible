@@ -43,6 +43,18 @@
   become: yes
   become_user: roboshop
 
+- name: copy catalogue systemd file
+  ansible.builtin.template:
+    src: systemd.service
+    dest: /home/roboshop/catalogue/catalogue.service
+    remote_src: yes
+
+- name: Restart Catalogue
+  ansible.builtin.systemd:
+    name: catalogue
+    state: restarted
+    enabled: yes
+    daemon-reload: yes
 
 
 
