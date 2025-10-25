@@ -1,12 +1,4 @@
 - name: SET Hostname
   ansible.builtin.shell: set-hostname {{COMPONENT}}
 
-- name: Install galaxy
-  ansible.builtin.shell: ansible-galaxy collection install community.general
-  when: APP_TYPE == "nodejs"
-  become_user: roboshop
 
-- name: Install galaxy mongodb collection
-  ansible.builtin.shell: ansible-galaxy collection install community.mongodb
-  when: APP_TYPE == "database"
-  become_user: roboshop
