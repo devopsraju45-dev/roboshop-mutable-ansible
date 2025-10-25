@@ -10,46 +10,51 @@
   ansible.builtin.user:
     name: roboshop
     comment: Roboshop App User
-    state: present
+    shell: /bin/bash
+    create_home: yes
 
 - name: Remove old app content
   ansible.builtin.file:
     path: /home/roboshop/{{COMPONENT}}
     state: absent
 
-- name: Download {{COMPONENT}} content and extract it
-  ansible.builtin.unarchive:
-    src: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
-    dest: /home/roboshop
-    remote_src: yes
-    extra_opts: [--strip-components=1]
-
-- name: Ensure roboshop owns the application directory
+- name: Create app directory
   ansible.builtin.file:
     path: /home/roboshop/{{COMPONENT}}
+    state: directory
     owner: roboshop
     group: roboshop
-    recurse: yes
-    state: directory
+    mode: '0755'
 
-- name: Install nodejs dependencies
+- name: Download {{COMPONENT}} zip
+  ansible.builtin.get_url:
+    url: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
+    dest: /tmp/{{COMPONENT}}.zip
+    mode: '0644'
+
+- name: Extract {{COMPONENT}} zip
+  ansible.builtin.unarchive:
+    src: /tmp/{{COMPONENT}}.zip
+    dest: /home/roboshop/{{COMPONENT}}
+    remote_src: yes
+    owner: roboshop
+    group: roboshop
+
+- name: Install NodeJS dependencies
   community.general.npm:
     path: /home/roboshop/{{COMPONENT}}
   become: yes
   become_user: roboshop
 
-- name: Setup {{COMPONENT}} systemd service
+- name: Setup systemd service
   ansible.builtin.template:
     src: systemd.service
     dest: /etc/systemd/system/{{COMPONENT}}.service
-    mode: 0644
+    mode: '0644'
 
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
-    daemon_reload: yes
-
-- name: Start and enable {{COMPONENT}}
+- name: Reload systemd daemon and start service
   ansible.builtin.systemd:
     name: "{{COMPONENT}}"
     state: restarted
     enabled: yes
+    daemon_reload: yes
