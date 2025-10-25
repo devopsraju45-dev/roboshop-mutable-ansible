@@ -9,4 +9,5 @@
 - name: Install galaxy mongodb collection
   ansible.builtin.shell: ansible-galaxy collection install community.mongodb
   when: APP_TYPE == "database"
+  become: yes
   become_user: roboshop
