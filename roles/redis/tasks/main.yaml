@@ -5,7 +5,7 @@
 
 - name: Install redis Server and Shell
   ansible.builtin.yum:
-    name: redis-6.2.7
+    name: redis
     state: present
 
 - name: Update redis Listen Address
