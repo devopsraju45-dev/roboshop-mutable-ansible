@@ -1,7 +1,7 @@
 - name: SetUp NodeJS repos
   ansible.builtin.shell: curl --silent --location https://rpm.nodesource.com/setup_16.x | bash
 
-- name: install NodeJs
+- name: Install NodeJs
   ansible.builtin.yum:
     name: nodejs
     state: installed
@@ -10,25 +10,27 @@
   ansible.builtin.user:
     name: roboshop
     comment: Roboshop App User
+    state: present
 
-- name: Remove old app  content
+- name: Remove old app content
   ansible.builtin.file:
     path: /home/roboshop/{{COMPONENT}}
     state: absent
 
-- name: Download catalogue content and extract it
+- name: Download {{COMPONENT}} content and extract it
   ansible.builtin.unarchive:
     src: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
-    dest: /tmp
+    dest: /home/roboshop
     remote_src: yes
+    extra_opts: [--strip-components=1]
 
-- name: copy user content
-  ansible.builtin.copy:
-    src: /tmp/{{COMPONENT}}-main/
-    dest: /home/roboshop/{{COMPONENT}}
-    remote_src: yes
-
-
+- name: Ensure roboshop owns the application directory
+  ansible.builtin.file:
+    path: /home/roboshop/{{COMPONENT}}
+    owner: roboshop
+    group: roboshop
+    recurse: yes
+    state: directory
 
 - name: Install nodejs dependencies
   community.general.npm:
@@ -36,29 +38,18 @@
   become: yes
   become_user: roboshop
 
-- name: Setup catalogue systemd service
+- name: Setup {{COMPONENT}} systemd service
   ansible.builtin.template:
     src: systemd.service
     dest: /etc/systemd/system/{{COMPONENT}}.service
     mode: 0644
 
-
 - name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Start and enable {{COMPONENT}}
   ansible.builtin.systemd:
     name: "{{COMPONENT}}"
     state: restarted
     enabled: yes
-    daemon_reload: yes
-
-
-
-- name: Restart Catalogue
-  ansible.builtin.systemd:
-    name: catalogue
-    state: restarted
-    enabled: yes
-    daemon-reload: yes
-
-
-
-
