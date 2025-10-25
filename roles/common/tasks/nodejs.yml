@@ -1,7 +1,7 @@
 - name: SetUp NodeJS repos
   ansible.builtin.shell: curl --silent --location https://rpm.nodesource.com/setup_16.x | bash
 
-- name: Install NodeJS
+- name: Install NodeJs
   ansible.builtin.yum:
     name: nodejs
     state: installed
@@ -10,14 +10,13 @@
   ansible.builtin.user:
     name: roboshop
     comment: Roboshop App User
-    shell: /bin/bash
 
 - name: Remove old app content
   ansible.builtin.file:
     path: /home/roboshop/{{COMPONENT}}
     state: absent
 
-- name: Ensure app directory exists
+- name: Create app directory
   ansible.builtin.file:
     path: /home/roboshop/{{COMPONENT}}
     state: directory
@@ -30,14 +29,20 @@
     url: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
     dest: /tmp/{{COMPONENT}}.zip
 
-- name: Extract {{COMPONENT}} content
+- name: Extract {{COMPONENT}} content to temp directory
   ansible.builtin.unarchive:
     src: /tmp/{{COMPONENT}}.zip
-    dest: /home/roboshop/{{COMPONENT}}
+    dest: /tmp/{{COMPONENT}}
     remote_src: yes
+
+- name: Copy extracted content to app directory
+  ansible.builtin.copy:
+    src: /tmp/{{COMPONENT}}/{{COMPONENT}}-main/
+    dest: /home/roboshop/{{COMPONENT}}/
     owner: roboshop
     group: roboshop
-    extra_opts: [--strip-components=1]
+    mode: '0755'
+    remote_src: yes
 
 - name: Install nodejs dependencies
   community.general.npm:
