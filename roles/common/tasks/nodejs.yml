@@ -10,35 +10,42 @@
   ansible.builtin.user:
     name: roboshop
     comment: Roboshop App User
+    create_home: yes
 
 - name: Remove old app content
   ansible.builtin.file:
-    path: /home/roboshop/{{COMPONENT}}
+    path: /home/roboshop/{{ COMPONENT }}
     state: absent
 
-- name: Create app directory
+- name: Create application directory
   ansible.builtin.file:
-    path: /home/roboshop/{{COMPONENT}}
+    path: /home/roboshop/{{ COMPONENT }}
     state: directory
     owner: roboshop
     group: roboshop
     mode: '0755'
 
-- name: Download {{COMPONENT}} content
+- name: Download {{ COMPONENT }} content
   ansible.builtin.get_url:
-    url: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
-    dest: /tmp/{{COMPONENT}}.zip
+    url: https://github.com/roboshop-devops-project/{{ COMPONENT }}/archive/main.zip
+    dest: /tmp/{{ COMPONENT }}.zip
 
-- name: Extract {{COMPONENT}} content to temp directory
+- name: Create temp extraction directory
+  ansible.builtin.file:
+    path: /tmp/{{ COMPONENT }}
+    state: directory
+    mode: '0755'
+
+- name: Extract {{ COMPONENT }} content to temp directory
   ansible.builtin.unarchive:
-    src: /tmp/{{COMPONENT}}.zip
-    dest: /tmp/{{COMPONENT}}
+    src: /tmp/{{ COMPONENT }}.zip
+    dest: /tmp/{{ COMPONENT }}
     remote_src: yes
 
-- name: Copy extracted content to app directory
+- name: Copy app content to final location
   ansible.builtin.copy:
-    src: /tmp/{{COMPONENT}}/{{COMPONENT}}-main/
-    dest: /home/roboshop/{{COMPONENT}}/
+    src: /tmp/{{ COMPONENT }}/{{ COMPONENT }}-main/
+    dest: /home/roboshop/{{ COMPONENT }}
     owner: roboshop
     group: roboshop
     mode: '0755'
@@ -46,19 +53,22 @@
 
 - name: Install nodejs dependencies
   community.general.npm:
-    path: /home/roboshop/{{COMPONENT}}
+    path: /home/roboshop/{{ COMPONENT }}
   become: yes
   become_user: roboshop
 
-- name: Setup {{COMPONENT}} systemd service
+- name: Setup {{ COMPONENT }} systemd service
   ansible.builtin.template:
     src: systemd.service
-    dest: /etc/systemd/system/{{COMPONENT}}.service
-    mode: '0644'
+    dest: /etc/systemd/system/{{ COMPONENT }}.service
+    mode: 0644
 
-- name: Reload systemd daemon and start service
+- name: Reload systemd daemon
   ansible.builtin.systemd:
-    name: "{{COMPONENT}}"
+    daemon_reload: yes
+
+- name: Enable and start {{ COMPONENT }}
+  ansible.builtin.systemd:
+    name: "{{ COMPONENT }}"
     state: restarted
     enabled: yes
-    daemon_reload: yes
