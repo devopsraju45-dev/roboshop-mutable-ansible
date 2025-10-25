@@ -46,7 +46,7 @@
 - name: copy catalogue systemd file
   ansible.builtin.template:
     src: systemd.service
-    dest: /home/roboshop/catalogue/catalogue.service
+    dest: /home/systemd/system/catalogue.service
     remote_src: yes
 
 - name: Restart Catalogue
