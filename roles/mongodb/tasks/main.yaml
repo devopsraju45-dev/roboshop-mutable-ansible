@@ -8,6 +8,11 @@
     name: mongodb-org
     state: installed
 
+- name: Install MongoDB Shell (mongosh)
+  ansible.builtin.yum:
+    name: mongodb-mongosh
+    state: installed
+
 - name: Update MongoDB Listen Address
   ansible.builtin.replace:
     path: /etc/mongod.conf
