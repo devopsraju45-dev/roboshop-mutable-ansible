@@ -31,6 +31,9 @@
 - name: Install nodejs dependencies
   community.general.npm:
     path: /home/roboshop/catalogue
+    owner: roboshop
+    group: roboshop
+    recurse: yes
   become_user: roboshop
 
 
