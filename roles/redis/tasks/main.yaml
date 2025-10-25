@@ -8,14 +8,18 @@
     name: redis
     state: present
 
-- name: Update redis Listen Address
+- name: Check if redis.cnf exists
+  ansible.builtin.stat:
+    path: /etc/redis/redis.cnf
+  register: redis_cnf
+
+- name: Update redis.cnf if exists
   ansible.builtin.replace:
-    path: "{{item}}"
+    path: /etc/redis/redis.cnf
     regexp: '127.0.0.1'
     replace: '0.0.0.0'
-  loop:
-    - /etc/redis.conf
-    - /etc/redis/redis.cnf
+  when: redis_cnf.stat.exists
+
 
 - name: Restart redis
   ansible.builtin.systemd:
