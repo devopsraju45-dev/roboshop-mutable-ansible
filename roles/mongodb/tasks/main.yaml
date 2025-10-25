@@ -31,15 +31,17 @@
     dest: /tmp
     remote_src: yes
 
-- name: Load Schema
+# ✅ Unarchive the MongoDB schema files (only once, no need to repeat)
+- name: Download and extract MongoDB schema files
   ansible.builtin.unarchive:
     src: https://github.com/roboshop-devops-project/mongodb/archive/main.zip
     dest: /tmp
     remote_src: yes
 
-- name: Load Schema
+# ✅ Load the schema using the correct path
+- name: Load MongoDB schema files
   community.mongodb.mongodb_shell:
-    file: "/tmp.mongodb-main/{{item}}.js"
+    file: "/tmp/mongodb-main/{{ item }}.js"
     idempotent: yes
   loop:
     - catalogue
