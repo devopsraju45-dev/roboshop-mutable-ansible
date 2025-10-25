@@ -48,6 +48,7 @@
     src: systemd.service
     dest: /etc/systemd/system/catalogue.service
     mode: 0644
+    remote_src: yes
 
 - name: Reload systemd daemon
   ansible.builtin.systemd:
