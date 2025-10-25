@@ -45,7 +45,7 @@
 
 - name: Setup catalogue systemd service
   ansible.builtin.template:
-    src: systemd.service.j2
+    src: systemd.service
     dest: /etc/systemd/system/catalogue.service
     mode: 0644
 
