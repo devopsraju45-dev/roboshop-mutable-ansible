@@ -3,7 +3,7 @@
     src: redis.repo
     dest: /etc/yum.repos.d/redis.repo
 
-- name: Install MongoDB Server and Shell
+- name: Install redis Server and Shell
   ansible.builtin.yum:
     name: redis-6.2.7
     state: present
