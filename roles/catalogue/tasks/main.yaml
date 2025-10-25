@@ -29,6 +29,13 @@
     remote_src: yes
 
 
+- name: Ensure roboshop owns the catalogue directory
+  ansible.builtin.file:
+    path: /home/roboshop/catalogue
+    owner: roboshop
+    group: roboshop
+    recurse: yes
+  become: yes
 
 - name: Install nodejs dependencies
   community.general.npm:
