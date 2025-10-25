@@ -2,8 +2,8 @@
 Description = Catalogue Service
 [Service]
 User=roboshop
-Environment=DOCUMENTDB=true
-Environment=MONGO_URL={{ lookup('aws_ssm', 'immutable.docdb.catalogue.MONGO_URL', region='us-east-1' ) }}
+Environment=MONGO=true
+Environment=MONGO_URL="mongodb-{{ENV}}.learndevopspractice.online:27017/catalogue"
 ExecStart=/bin/node /home/roboshop/catalogue/server.js
 SyslogIdentifier=catalogue
 
