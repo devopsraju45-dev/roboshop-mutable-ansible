@@ -1,2 +1,2 @@
-COMPONENT: mongodb
+COMPONENT: redis
 APP_TYPE: database
