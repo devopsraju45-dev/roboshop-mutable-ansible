@@ -3,15 +3,12 @@
     src: mongodb.repo
     dest: /etc/yum.repos.d/mongodb.repo
 
-- name: Install MongoDB Server
+- name: Install MongoDB Server and Shell
   ansible.builtin.yum:
-    name: mongodb-org
-    state: installed
-
-- name: Install MongoDB Shell (mongosh)
-  ansible.builtin.yum:
-    name: mongodb-mongosh
-    state: installed
+    name:
+      - mongodb-org
+      - mongodb-mongosh
+    state: present
 
 - name: Update MongoDB Listen Address
   ansible.builtin.replace:
