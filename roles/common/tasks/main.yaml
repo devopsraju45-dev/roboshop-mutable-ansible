@@ -6,8 +6,10 @@
   when: APP_TYPE == "nodejs"
   become_user: roboshop
 
-- name: Install galaxy mongodb collection
-  ansible.builtin.shell: ansible-galaxy collection install community.mongodb
+- name: Install galaxy mongodb collection on control node
+  delegate_to: localhost
+  run_once: true
+  ansible.builtin.command:
+    cmd: ansible-galaxy collection install community.mongodb
   when: APP_TYPE == "database"
-  become: yes
-  become_user: roboshop
+  become: no
