@@ -43,25 +43,7 @@
   become: yes
   become_user: roboshop
 
-- name: Setup catalogue systemd service
-  ansible.builtin.template:
-    src: systemd.service
-    dest: /etc/systemd/system/catalogue.service
-    mode: 0644
-    remote_src: yes
 
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
-    daemon_reload: yes
-
-
-
-- name: Restart Catalogue
-  ansible.builtin.systemd:
-    name: catalogue
-    state: restarted
-    enabled: yes
-    daemon-reload: yes
 
 
 
