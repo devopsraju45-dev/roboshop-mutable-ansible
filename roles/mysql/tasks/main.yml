@@ -1,3 +1,22 @@
+- name: Copy MySQL repo file
+  ansible.builtin.copy:
+    src: mysql.repo
+    dest: /etc/yum.repos.d/mysql.repo
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable default MySQL module (resolves modular filtering issue)
+  ansible.builtin.command: dnf module disable mysql -y
+  args:
+    warn: false
+  register: disable_mysql_module
+  changed_when: "'Nothing to do' not in disable_mysql_module.stdout"
+
+- name: Clean metadata after disabling module
+  ansible.builtin.command: dnf clean all
+  args:
+    warn: false
 - name: Copy MYSQL repo file
   ansible.builtin.copy:
     src: mysql.repo
