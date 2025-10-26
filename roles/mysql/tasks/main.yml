@@ -1,0 +1,19 @@
+- name: Copy MYSQL repo file
+  ansible.builtin.copy:
+    src: mysql.repo
+    dest: /etc/yum.repos.d/mysql.repo
+
+- name: Install MongoDB Server and Shell
+  ansible.builtin.yum:
+    name: mysql-community-server
+    state: installed
+
+- name: Start MYSQL Service
+  ansible.builtin.systemd:
+    daemon_reload: mysql
+    state: restarted
+    enabled: yes
+
+
+
+
