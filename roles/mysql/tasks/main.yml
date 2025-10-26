@@ -6,15 +6,12 @@
     group: root
     mode: '0644'
 
-- name: Disable default MySQL module (prevents modular filtering error)
+- name: Disable default MySQL module
   ansible.builtin.command: dnf module disable mysql -y
-  args:
-    warn: false
 
 - name: Clean DNF metadata
   ansible.builtin.command: dnf clean all
-  args:
-    warn: false
+
 
 - name: Install MySQL Server and Python 3 client
   ansible.builtin.yum:
