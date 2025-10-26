@@ -17,7 +17,7 @@
   ansible.builtin.yum:
     name:
       - mysql-community-server
-      - python3-PyMySQL   # replaces deprecated MySQL-python
+      - python3   # replaces deprecated MySQL-python
     state: present
 
 - name: Enable and start MySQL service
