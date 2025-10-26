@@ -2,19 +2,34 @@
   ansible.builtin.copy:
     src: mysql.repo
     dest: /etc/yum.repos.d/mysql.repo
+    owner: root
+    group: root
+    mode: '0644'
 
-- name: Install MySQL Server
+- name: Disable default MySQL module (prevents modular filtering error)
+  ansible.builtin.command: dnf module disable mysql -y
+  args:
+    warn: false
+
+- name: Clean DNF metadata
+  ansible.builtin.command: dnf clean all
+  args:
+    warn: false
+
+- name: Install MySQL Server and Python 3 client
   ansible.builtin.yum:
     name:
       - mysql-community-server
-      - MySQL-python
-    state: installed
+      - python3-PyMySQL   # replaces deprecated MySQL-python
+    state: present
 
-- name: Start MySQL Service
+- name: Enable and start MySQL service
   ansible.builtin.systemd:
     name: mysqld
-    state: restarted
-    enabled: yes
+    state: started
+    enabled: true
+
+
 
 - name: Check Root Default Password
   block:
