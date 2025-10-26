@@ -2,26 +2,21 @@
   ansible.builtin.copy:
     src: mysql.repo
     dest: /etc/yum.repos.d/mysql.repo
-    owner: root
-    group: root
-    mode: '0644'
 
-
-- name: Copy MYSQL repo file
-  ansible.builtin.copy:
-    src: mysql.repo
-    dest: /etc/yum.repos.d/mysql.repo
-
-- name: Install MySQL Community Server
+- name: Install MySQL Server
   ansible.builtin.yum:
-    name: mysql-community-server
+    name:
+      - mysql-community-server
+      - MySQL-python
     state: installed
 
-- name: Start MYSQL Service
+- name: Start MySQL Service
   ansible.builtin.systemd:
     name: mysqld
-    state: started
+    state: restarted
     enabled: yes
+
+
 
 
 
