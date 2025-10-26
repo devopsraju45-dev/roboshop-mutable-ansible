@@ -3,7 +3,7 @@
     src: mysql.repo
     dest: /etc/yum.repos.d/mysql.repo
 
-- name: Install MongoDB Server and Shell
+- name: Install MySQL Community Server
   ansible.builtin.yum:
     name: mysql-community-server
     state: installed
