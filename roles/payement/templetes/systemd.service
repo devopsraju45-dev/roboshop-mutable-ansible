@@ -1,0 +1,11 @@
+[Unit]
+Description = shipping Service
+[Service]
+User=roboshop
+Environment=REDIS_HOST=shipping-{{ENV}}.learndevopspractice.online
+Environment=DB_HOST=mysql-{{ENV}}.learndevopspractice.online
+ExecStart=/bin/node /home/roboshop/shipping/server.js
+SyslogIdentifier=shipping
+
+[Install]
+WantedBy=multi-user.target
