@@ -1,2 +1,2 @@
-COMPONENT: mongodb
+COMPONENT: rabbitmq
 APP_TYPE: database
